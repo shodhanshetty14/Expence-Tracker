@@ -1,14 +1,26 @@
 from datetime import datetime as dt
+import re
 
 
-# print(dt.now())
+f = open("spendings.txt", "a")
 
+while True:
+    item = input("Enter the reason of spending(or to stop press 'q'): ")
+    if item.lower() == "q":
+        f.write("\n")
+        f.close()
+        break
+    
+    cost = int(input("Enter the cost of the item: ₹ "))
+    expence = f"\n{str(dt.now())} ) {item}  ->  {cost}" 
+    
+    f.write(expence)
 
-
-
-
-# f1 = open('spendings.txt', 'a')
-
-# s = "Hello I'm Shodhan Shetty.\nThis is my 1st testing\n"
-# f1.write(s)
-# f1.close()
+f1 = open("spendings.txt", "r")
+for line in f1:
+    print("enter FOR")
+    if str(dt.now()) in line:
+        print("enter IF")
+        x = re.findall('[0-9]+', line)
+        print(x)
+f1.close()
