@@ -1,26 +1,52 @@
-from datetime import datetime as dt
+
+from datetime import date
 import re
 
 
-f = open("spendings.txt", "a")
+class Spending:
+    def writeFile(self, f):
+        while True:
+            item = input("Enter the reason of spending(or to stop press 'q'): ")
+            if item.lower() == "q":
+                f.close()
+                break
+            
+            cost = float(input("Enter the cost of the item: ₹ "))
+            expence = f"{item}  ->  {cost}\n" 
+            
+            f.write(expence)
 
-while True:
-    item = input("Enter the reason of spending(or to stop press 'q'): ")
-    if item.lower() == "q":
-        f.write("\n")
+
+class Display:
+    def disp(self, name):
+        f1 = open(name, "r")
+        lst = []
+        for line in f1:
+            line = line.strip()
+            if "Today's Expence is:" in line:
+                continue
+            x = re.findall(r"[-+]?(?:\d*\.*\d+)", line)
+            for i in x:
+                lst.append(float(i))
+        f1.close()
+        return lst
+    
+    
+    def costLst(self, lst, name):
+        total = 0
+        f = open(name, "a")
+        for data in lst:
+            total += data
+        final = f"\nToday's Expence is:  {total}\n\n"
+        f.write(final)
+        print(f"today's Expence is: ₹ {total}")
         f.close()
-        break
-    
-    cost = int(input("Enter the cost of the item: ₹ "))
-    expence = f"\n{str(dt.now())} ) {item}  ->  {cost}" 
-    
-    f.write(expence)
 
-f1 = open("spendings.txt", "r")
-for line in f1:
-    print("enter FOR")
-    if str(dt.now()) in line:
-        print("enter IF")
-        x = re.findall('[0-9]+', line)
-        print(x)
-f1.close()
+if __name__ == "__main__":
+    name = f"{date.today()}.txt"
+    f= open(name, 'a')
+    s = Spending()
+    s.writeFile(f)
+    d = Display()
+    total = d.disp(name)
+    d.costLst(total,name)
